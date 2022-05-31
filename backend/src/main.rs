@@ -3,7 +3,7 @@ use chrono::{DateTime, Utc};
 mod modules;
 use modules::trip::Trips;
 use modules::record::Record;
-use modules::category::Category;
+use modules::category::Categories;
 
 fn main() {
     let now: DateTime<Utc> = Utc::now();
@@ -18,10 +18,10 @@ fn main() {
     trips.delete(2);
     println!("{:?}", trips);
 
+    let mut categories: Categories = Categories::new();
+    categories.post(1, "Diesel");
+    println!("{:?}", categories);
 
-    let category_teste: Category = Category::add(1, "Diesel");
-    println!("{:?}", category_teste);
-
-    let record_teste: Record = Record::add(1, 1, category_teste.id, "Diesel", now, 100, 1.0, 100.0);
+    let record_teste: Record = Record::add(1, 1, 1, "Diesel", now, 100, 1.0, 100.0);
     println!("{:?}", record_teste);
 }
