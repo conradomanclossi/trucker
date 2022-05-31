@@ -28,10 +28,36 @@ impl fmt::Debug for Record {
     }
 }
 
-impl Record {
-    pub fn add(id: u32, trip_id: u32, category_id: u32, name: &'static str, date: DateTime<Utc>, amount: u32, value_per_amount: f64, total: f64) -> Record {
+pub struct Records {
+    // A Records modelation
+    pub vec: Vec<Record>,
+}
+
+impl fmt::Debug for Records {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Records").field("vec", &self.vec).finish()
+    }
+}
+
+impl Records {
+    pub fn new() -> Records {
+        // Create a new Records
+        Records { vec: Vec::new() }
+    }
+
+    pub fn post(
+        &mut self,
+        id: u32,
+        trip_id: u32,
+        category_id: u32,
+        name: &'static str,
+        date: DateTime<Utc>,
+        amount: u32,
+        value_per_amount: f64,
+        total: f64,
+    ) {
         // Add a Record
-        Record {
+        self.vec.push(Record {
             id: id,
             trip_id: trip_id,
             category_id: category_id,
@@ -40,6 +66,41 @@ impl Record {
             amount: amount,
             value_per_amount: value_per_amount,
             total: total,
+        });
+    }
+
+    pub fn get(&self, id: u32) -> Option<&Record> {
+        // Get a Record from the Records
+        self.vec.iter().find(|&record| record.id == id)
+    }
+
+    pub fn put(
+        &mut self,
+        id: u32,
+        trip_id: u32,
+        category_id: u32,
+        name: &'static str,
+        date: DateTime<Utc>,
+        amount: u32,
+        value_per_amount: f64,
+        total: f64,
+    ) {
+        // Update a Record from the Records
+        for record in &mut self.vec {
+            if record.id == id {
+                record.trip_id = trip_id;
+                record.category_id = category_id;
+                record.name = name;
+                record.date = date;
+                record.amount = amount;
+                record.value_per_amount = value_per_amount;
+                record.total = total;
+            }
         }
+    }
+
+    pub fn delete(&mut self, id: u32) {
+        // Delete a Record from the Records
+        self.vec.retain(|record| record.id != id);
     }
 }
