@@ -1,27 +1,21 @@
-use chrono::{DateTime, Utc};
+use axum::{response::Html, routing::get, Router};
+use std::net::SocketAddr;
 
-mod modules;
-use modules::trip::Trips;
-use modules::record::Record;
-use modules::category::Categories;
+#[tokio::main]
+async fn main() {
+    // build our application with a route
+    let app = Router::new().route("/", get(handler));
 
-fn main() {
-    let now: DateTime<Utc> = Utc::now();
+    // run it
+    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    println!("listening on {}", addr);
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
 
-    let mut trips: Trips = Trips::new();
-    trips.post(1, now, None);
-    trips.post(2, now, None);
-    trips.post(3, now, None);
-    println!("{:?}", trips.get(2));
-    trips.put(2, None, Some(now));
-    println!("{:?}", trips.get(2));
-    trips.delete(2);
-    println!("{:?}", trips);
-
-    let mut categories: Categories = Categories::new();
-    categories.post(1, "Diesel");
-    println!("{:?}", categories);
-
-    let record_teste: Record = Record::add(1, 1, 1, "Diesel", now, 100, 1.0, 100.0);
-    println!("{:?}", record_teste);
+}
+    
+async fn handler() -> Html<&'static str> {
+    Html("<h1>Hello, World!!!</h1>")
 }
