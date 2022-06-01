@@ -18,17 +18,20 @@ impl fmt::Debug for Category {
     }
 }
 
+#[allow(dead_code)]
 pub struct Categories {
     // A Categories modelation
     pub vec: Vec<Category>,
 }
 
+#[allow(dead_code)]
 impl fmt::Debug for Categories {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Categories").field("vec", &self.vec).finish()
     }
 }
 
+#[allow(dead_code)]
 impl Categories {
     pub fn new() -> Categories {
         // Create a new Categories

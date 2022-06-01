@@ -28,17 +28,20 @@ impl fmt::Debug for Record {
     }
 }
 
+#[allow(dead_code)]
 pub struct Records {
     // A Records modelation
     pub vec: Vec<Record>,
 }
 
+#[allow(dead_code)]
 impl fmt::Debug for Records {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Records").field("vec", &self.vec).finish()
     }
 }
 
+#[allow(dead_code)]
 impl Records {
     pub fn new() -> Records {
         // Create a new Records
