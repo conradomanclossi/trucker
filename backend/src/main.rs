@@ -1,29 +1,29 @@
-use axum::{response::Html, response::Json, routing::get, routing::post, Router, Server};
-use serde::{Deserialize, Serialize};
+#[macro_use]
+extern crate diesel;
+extern crate dotenv;
+
+use axum::{response::Html, routing::get, routing::post, Router, Server};
 use std::net::SocketAddr;
 
-#[derive(Deserialize, Serialize)]
-struct CreateUser {
-    name: String,
-}
+mod database;
+mod models;
+mod modules;
+mod schema;
+use modules::users::new_user::new;
 
 async fn handler() -> Html<&'static str> {
     Html("<p>Hello, World!!!</p>")
 }
 
-async fn create_user(Json(payload): Json<CreateUser>) -> Json<CreateUser> {
-    Json(CreateUser { name: payload.name })
-}
-
 #[tokio::main]
 async fn main() {
     // build our application with a route
-    let app = Router::new()
+    let app: Router = Router::new()
         .route("/", get(handler))
-        .route("/user", post(create_user));
+        .route("/new_user", post(new));
 
     // run it
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    let addr: SocketAddr = SocketAddr::from(([127, 0, 0, 1], 3000));
     println!("listening on {}", addr);
     Server::bind(&addr)
         .serve(app.into_make_service())
